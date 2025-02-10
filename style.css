@@ -9,6 +9,7 @@
     -webkit-font-smoothing: antialiased;
     margin-top: 50px;
     text-align: center;
+    font-family: 'Inter', sans-serif;
   }
   img, picture, video, canvas, svg {
     display: block;
@@ -64,9 +65,23 @@
 #reset {
     padding: 10px 20px;
     font-size: 1rem;
-    /* background-color: #007bff; */
-    color: #000;
+    background-color: #157be9;
+    color: #fff;
     border: none;
+    border-radius: 20px;
     cursor: pointer;
+    margin: 20px auto;
+}
+
+.input-container {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#start {
+    width: 100px;
 }
 

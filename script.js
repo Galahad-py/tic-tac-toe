@@ -12,10 +12,6 @@ const TicTacToe = (() => {
         }
         return false; // Invalid move
       };
-
-        document.getElementById("reset").addEventListener("click", () => {
-            GameController.resetGame();
-        });
   
       const resetBoard = () => {
         for (let i = 0; i < board.length; i++) {
@@ -30,6 +26,8 @@ const TicTacToe = (() => {
     const GameController = (() => {
       let currentPlayer = "X"; // X starts the game
       let gameActive = true; // Game is active
+      let player1Name = "Player 1"; // Default names
+      let player2Name = "Player 2";
   
       const switchPlayer = () => {
         currentPlayer = currentPlayer === "X" ? "O" : "X";
@@ -76,7 +74,8 @@ const TicTacToe = (() => {
   
           const winner = checkWinner();
           if (winner) {
-            DisplayController.showMessage(`Player ${winner} wins!`);
+            const winnerName = winner === "X" ? player1Name : player2Name;
+            DisplayController.showMessage(`${winnerName} wins!`);
             gameActive = false;
             return;
           }
@@ -88,7 +87,8 @@ const TicTacToe = (() => {
           }
   
           switchPlayer();
-          DisplayController.showMessage(`Player ${currentPlayer}'s turn`);
+          const currentPlayerName = currentPlayer === "X" ? player1Name : player2Name;
+          DisplayController.showMessage(`${currentPlayerName}'s turn`);
         } else {
           console.log("Invalid move! Try again");
         }
@@ -99,10 +99,15 @@ const TicTacToe = (() => {
         currentPlayer = "X";
         gameActive = true;
         DisplayController.renderBoard(); // Reset the UI
-        DisplayController.showMessage("Game reset. Player X starts.");
+        DisplayController.showMessage(`${player1Name}'s turn`);
       };
   
-      return { playMove, resetGame };
+      const setPlayerNames = (name1, name2) => {
+        player1Name = name1 || "Player 1";
+        player2Name = name2 || "Player 2";
+      };
+  
+      return { playMove, resetGame, setPlayerNames };
     })();
   
     // DisplayController module
@@ -135,8 +140,31 @@ const TicTacToe = (() => {
     })();
   
     // Initialize the game
-    DisplayController.renderBoard();
-    DisplayController.showMessage("Player X starts");
+    const startGame = () => {
+      const player1 = document.getElementById("player1").value.trim();
+      const player2 = document.getElementById("player2").value.trim();
+  
+      if (!player1 || !player2) {
+        alert("Please enter both player names!");
+        return;
+      }
+  
+      GameController.setPlayerNames(player1, player2);
+  
+      document.querySelector(".welcome-text").style.display = "none";
+      document.querySelector(".input-container").style.display = "none";
+  
+      document.getElementById("message").style.display = "block";
+      document.getElementById("board").style.display = "grid";
+      document.getElementById("reset").style.display = "block";
+  
+      GameController.resetGame();
+    };
+  
+    document.getElementById("start").addEventListener("click", startGame);
+    document.getElementById("reset").addEventListener("click", () => {
+      GameController.resetGame();
+    });
   
     // Public API
     return {
